@@ -81,11 +81,16 @@ export default {
           title: 'Inspire',
           to: '/inspire',
         },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Game Analysis',
+          to: '/game-analysis',
+        },
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js',
+      title: 'Game Analysis',
     }
   },
 }
