@@ -1,8 +1,18 @@
 import axios from 'axios'
 
 class GamesApi {
-  async getGames() {
+  async getAll() {
     const response = await axios.get('http://localhost:8000/api/Game', {
+      headers: {
+        Accept: '*/*',
+      },
+    })
+
+    return response.data
+  }
+
+  async get(id) {
+    const response = await axios.get(`http://localhost:8000/api/Game/${id}`, {
       headers: {
         Accept: '*/*',
       },

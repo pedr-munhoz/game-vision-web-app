@@ -200,7 +200,15 @@ export default {
     },
 
     possibleResults: ['Run', 'Incomplete Pass', 'Complete Pass', 'Sack', 'INT'],
+
+    gameId: 0,
   }),
+
+  created() {
+    this.gameId = this.$route.params.id
+    this.getGame()
+    this.getPlays()
+  },
 
   methods: {
     show(item, event) {
@@ -220,6 +228,10 @@ export default {
       )
       if (previousPlay) this.currentPlay = previousPlay
     },
+
+    getGame() {},
+
+    getPlays() {},
   },
 }
 </script>

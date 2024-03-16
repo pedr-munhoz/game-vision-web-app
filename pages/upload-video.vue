@@ -62,7 +62,7 @@ export default {
     getGames() {
       const api = new GamesApi()
       api
-        .getGames()
+        .getAll()
         .then((data) => {
           this.games = data
         })

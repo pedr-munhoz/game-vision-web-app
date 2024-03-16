@@ -66,7 +66,7 @@ export default {
     getGames() {
       const api = new GamesApi()
       api
-        .getGames()
+        .getAll()
         .then((data) => {
           this.games = data
         })
@@ -80,7 +80,7 @@ export default {
       api
         .createGame(name)
         .then((data) => {
-          this.getGames()
+          this.getAll()
         })
         .catch((error) => {
           this.snackbarText = `Error creating the game: ${error}`
