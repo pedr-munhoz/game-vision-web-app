@@ -13,12 +13,12 @@
               ></iframe>
             </v-card-text>
             <v-card-actions>
-              <v-btn outlined @click="previous()"
-                ><v-icon>mdi-skip-previous</v-icon></v-btn
-              >
-              <v-btn outlined @click="next()"
-                ><v-icon>mdi-skip-next</v-icon></v-btn
-              >
+              <v-btn outlined @click="previous()">
+                <v-icon>mdi-skip-previous</v-icon>
+              </v-btn>
+              <v-btn outlined @click="next()">
+                <v-icon>mdi-skip-next</v-icon>
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
