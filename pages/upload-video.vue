@@ -31,6 +31,8 @@
 import GamesApi from '@/services/gamesApi'
 
 export default {
+  name: 'VideoUploadPage',
+
   data: () => ({
     games: [],
     selectedFile: null,

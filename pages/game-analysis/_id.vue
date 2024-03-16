@@ -12,6 +12,7 @@
                 allow="autoplay"
               ></iframe>
             </v-card-text>
+
             <v-card-actions>
               <v-btn outlined @click="previous()">
                 <v-icon>mdi-skip-previous</v-icon>
@@ -22,6 +23,7 @@
             </v-card-actions>
           </v-card>
         </v-col>
+
         <v-col cols="6">
           <v-card>
             <v-row>
@@ -70,6 +72,7 @@
             </v-row>
           </v-card>
         </v-col>
+
         <v-col>
           <v-card>
             <v-data-table dense :headers="headers" :items="items">
@@ -87,6 +90,7 @@
 <script>
 export default {
   name: 'GameAnalysisPage',
+
   data: () => ({
     headers: [
       { text: '', value: 'show' },
@@ -102,6 +106,7 @@ export default {
       { text: 'First Down', value: 'firstDown' },
       { text: 'TD', value: 'td' },
     ],
+
     items: [
       {
         id: '1kC7S_HlPGr94CpH1LHyzaxviFk4hO8zF',
@@ -181,6 +186,7 @@ export default {
         yards: '...',
       },
     ],
+
     currentPlay: {
       id: '1kC7S_HlPGr94CpH1LHyzaxviFk4hO8zF',
       playNumber: 1,
@@ -192,6 +198,7 @@ export default {
       result: '...',
       yards: '...',
     },
+
     possibleResults: ['Run', 'Incomplete Pass', 'Complete Pass', 'Sack', 'INT'],
   }),
 
@@ -199,12 +206,14 @@ export default {
     show(item, event) {
       this.currentPlay = item
     },
+
     next() {
       const nextPlay = this.items.find(
         (x) => x.playNumber === this.currentPlay.playNumber + 1
       )
       if (nextPlay) this.currentPlay = nextPlay
     },
+
     previous() {
       const previousPlay = this.items.find(
         (x) => x.playNumber === this.currentPlay.playNumber - 1

@@ -10,6 +10,7 @@
         </v-col>
       </v-row>
     </v-card-title>
+
     <v-card-text>
       <v-list>
         <v-list-item
@@ -22,6 +23,7 @@
           <v-list-item-action>
             <v-icon>mdi-video-outline</v-icon>
           </v-list-item-action>
+
           <v-list-item-content>
             <v-list-item-title v-text="item.name" />
           </v-list-item-content>
@@ -35,6 +37,8 @@
 import GamesApi from '@/services/gamesApi'
 
 export default {
+  name: 'GamesPage',
+
   data: () => ({
     games: [],
   }),
