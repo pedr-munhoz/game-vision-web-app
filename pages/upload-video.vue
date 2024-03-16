@@ -28,21 +28,23 @@
 </template>
 
 <script>
+import GamesApi from '@/services/gamesApi'
+
 export default {
   data: () => ({
-    games: [
-      { id: 1, name: 'vs União', to: '/game-analysis' },
-      { id: 2, name: 'at Rex', to: '/game-analysis' },
-      { id: 3, name: 'vs Santa Maria', to: '/game-analysis' },
-      { id: 4, name: 'at Almirantes', to: '/game-analysis' },
-      { id: 5, name: 'vs Pumpkins', to: '/game-analysis' },
-    ],
+    games: [],
     selectedFile: null,
   }),
+
+  created() {
+    this.getGames()
+  },
+
   methods: {
     handleFileUpload(file) {
       this.selectedFile = file
     },
+
     uploadVideo() {
       const formData = new FormData()
       formData.append('video', this.selectedFile)
@@ -53,6 +55,18 @@ export default {
       // } catch (error) {
       //   console.error('Error uploading video', error)
       // }
+    },
+
+    getGames() {
+      const api = new GamesApi()
+      api
+        .getGames()
+        .then((data) => {
+          this.games = data
+        })
+        .catch((error) => {
+          this.games = [{ id: 1, name: error, to: '/' }]
+        })
     },
   },
 }

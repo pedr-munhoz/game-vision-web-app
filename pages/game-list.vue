@@ -32,16 +32,30 @@
 </template>
 
 <script>
+import GamesApi from '@/services/gamesApi'
+
 export default {
   data: () => ({
-    games: [
-      { id: 1, name: 'vs União', to: '/game-analysis' },
-      { id: 2, name: 'at Rex', to: '/game-analysis' },
-      { id: 3, name: 'vs Santa Maria', to: '/game-analysis' },
-      { id: 4, name: 'at Almirantes', to: '/game-analysis' },
-      { id: 5, name: 'vs Pumpkins', to: '/game-analysis' },
-    ],
+    games: [],
   }),
+
+  created() {
+    this.getGames()
+  },
+
+  methods: {
+    getGames() {
+      const api = new GamesApi()
+      api
+        .getGames()
+        .then((data) => {
+          this.games = data
+        })
+        .catch((error) => {
+          this.games = [{ id: 1, name: error, to: '/' }]
+        })
+    },
+  },
 }
 </script>
 
