@@ -71,7 +71,8 @@ export default {
           this.games = data
         })
         .catch((error) => {
-          this.games = [{ id: 1, name: error, to: '/' }]
+          this.snackbarText = `Error listing the games: ${error}`
+          this.snackbar = true
         })
     },
 

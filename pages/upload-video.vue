@@ -1,30 +1,41 @@
 <template>
-  <v-card>
-    <v-card-title>Upload Video</v-card-title>
-    <v-card-text>
-      <v-row>
-        <v-col cols="6">
-          <v-file-input
-            v-model="selectedFile"
-            label="Choose a video file"
-            accept=".mp4"
-            outlined
-            @change="handleFileUpload"
-          />
-        </v-col>
-        <v-col cols="6">
-          <v-select
-            :items="games"
-            item-text="name"
-            item-value="id"
-            outlined
-            label="Game"
-          ></v-select>
-        </v-col>
-      </v-row>
-      <v-btn outlined @click="uploadVideo">Upload Video</v-btn>
-    </v-card-text>
-  </v-card>
+  <div>
+    <v-card>
+      <v-card-title>Upload Video</v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col cols="6">
+            <v-file-input
+              v-model="selectedFile"
+              label="Choose a video file"
+              accept=".mp4"
+              outlined
+              @change="handleFileUpload"
+            />
+          </v-col>
+          <v-col cols="6">
+            <v-select
+              :items="games"
+              item-text="name"
+              item-value="id"
+              outlined
+              label="Game"
+            ></v-select>
+          </v-col>
+        </v-row>
+        <v-btn outlined @click="uploadVideo">Upload Video</v-btn>
+      </v-card-text>
+    </v-card>
+
+    <v-snackbar v-model="snackbar">
+      {{ snackbarText }}
+      <template #actions>
+        <v-btn color="pink" variant="text" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+  </div>
 </template>
 
 <script>
@@ -36,6 +47,8 @@ export default {
   data: () => ({
     games: [],
     selectedFile: null,
+    snackbar: false,
+    snackbarText: '',
   }),
 
   created() {
@@ -67,7 +80,8 @@ export default {
           this.games = data
         })
         .catch((error) => {
-          this.games = [{ id: 1, name: error, to: '/' }]
+          this.snackbarText = `Error listing the games: ${error}`
+          this.snackbar = true
         })
     },
   },
