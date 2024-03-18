@@ -67,7 +67,9 @@ export default {
       const api = new PlaysApi()
       api
         .uploadVideo(this.gameId, this.selectedFile)
-        .then((data) => {})
+        .then((data) => {
+          alert('Video uploaded!')
+        })
         .catch((error) => {
           this.snackbarText = `Error uploading the video: ${error}`
           this.snackbar = true

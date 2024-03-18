@@ -81,7 +81,8 @@ export default {
       api
         .createGame(name)
         .then((data) => {
-          this.getAll()
+          this.getGames()
+          alert('Game created!')
         })
         .catch((error) => {
           this.snackbarText = `Error creating the game: ${error}`
