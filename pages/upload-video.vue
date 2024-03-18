@@ -15,6 +15,7 @@
           </v-col>
           <v-col cols="6">
             <v-select
+              v-model="gameId"
               :items="games"
               item-text="name"
               item-value="id"
@@ -40,11 +41,13 @@
 
 <script>
 import GamesApi from '@/services/gamesApi'
+import PlaysApi from '@/services/playsApi'
 
 export default {
   name: 'VideoUploadPage',
 
   data: () => ({
+    gameId: 0,
     games: [],
     selectedFile: null,
     snackbar: false,
@@ -61,15 +64,14 @@ export default {
     },
 
     uploadVideo() {
-      const formData = new FormData()
-      formData.append('video', this.selectedFile)
-
-      // try {
-      //   const response = await this.$axios.$post('/api/upload', formData)
-      //   console.log('Upload successful', response)
-      // } catch (error) {
-      //   console.error('Error uploading video', error)
-      // }
+      const api = new PlaysApi()
+      api
+        .uploadVideo(this.gameId, this.selectedFile)
+        .then((data) => {})
+        .catch((error) => {
+          this.snackbarText = `Error uploading the video: ${error}`
+          this.snackbar = true
+        })
     },
 
     getGames() {

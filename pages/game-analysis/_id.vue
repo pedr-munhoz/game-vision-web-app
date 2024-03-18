@@ -124,9 +124,7 @@ export default {
       { text: 'TD', value: 'touchdown' },
       { text: 'Notes', value: 'notes' },
     ],
-
     items: [],
-
     currentPlay: {
       id: '',
       fileld: '',
@@ -139,12 +137,11 @@ export default {
       result: '',
       yards: '',
     },
-
     possibleResults: ['Run', 'Incomplete Pass', 'Complete Pass', 'Sack', 'INT'],
-
     gameId: 0,
-
     game: { name: '' },
+    snackbar: false,
+    snackbarText: '',
   }),
 
   computed: {

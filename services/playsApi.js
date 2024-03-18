@@ -13,6 +13,24 @@ class PlaysApi {
 
     return response.data
   }
+
+  async uploadVideo(gameId, videoFile) {
+    const formData = new FormData()
+    formData.append('video', videoFile, videoFile.name)
+
+    const response = await axios.post(
+      `http://localhost:8000/api/Play/${gameId}`,
+      formData,
+      {
+        headers: {
+          Accept: '*/*',
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    )
+
+    return response.data
+  }
 }
 
 export default PlaysApi
