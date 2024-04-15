@@ -78,7 +78,55 @@
 
             <v-col>
               <v-card>
-                <v-data-table dense :headers="headers" :items="items">
+                <v-data-table dense :headers="tableHeaders" :items="plays">
+                  <template #body="{ items, headers }">
+                    <tbody>
+                      <tr v-for="(item, idx) in items" :key="idx">
+                        <td v-for="(header, key) in headers" :key="key">
+                          <v-icon
+                            v-if="header.value == 'show'"
+                            icon
+                            @click="show(item)"
+                          >
+                            mdi-play-outline
+                          </v-icon>
+                          <v-edit-dialog
+                            v-if="
+                              header.editable == 'text' ||
+                              header.editable == 'number'
+                            "
+                            :return-value.sync="item[header.value]"
+                            large
+                            @save="save"
+                            @cancel="cancel"
+                            @open="open"
+                            @close="close"
+                          >
+                            {{ item[header.value] }}
+                            <template #input>
+                              <v-text-field
+                                v-if="header.editable == 'text'"
+                                v-model="item[header.value]"
+                                label="Edit"
+                                single-line
+                              />
+                              <v-text-field
+                                v-if="header.editable == 'number'"
+                                v-model="item[header.value]"
+                                label="Edit"
+                                single-line
+                                type="number"
+                              />
+                            </template>
+                          </v-edit-dialog>
+                          <v-checkbox
+                            v-if="header.editable == 'bool'"
+                            v-model="item[header.value ?? false]"
+                          />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </template>
                   <template #item.show="{ item }">
                     <v-icon icon @click="show(item)"> mdi-play-outline </v-icon>
                   </template>
@@ -109,22 +157,22 @@ export default {
   name: 'GameAnalysisPage',
 
   data: () => ({
-    headers: [
-      { text: '', value: 'show' },
-      { text: '#', value: 'playNumber' },
-      { text: 'Offense', value: 'offense' },
-      { text: 'Defense', value: 'defense' },
-      { text: 'Down', value: 'down' },
-      { text: 'Distance', value: 'distance' },
-      { text: 'Formation', value: 'formation' },
-      { text: 'Name', value: 'name' },
-      { text: 'Yards', value: 'yards' },
-      { text: 'Result', value: 'result' },
-      { text: 'First Down', value: 'firstDown' },
-      { text: 'TD', value: 'touchdown' },
-      { text: 'Notes', value: 'notes' },
+    tableHeaders: [
+      { text: '', value: 'show', editable: null },
+      { text: '#', value: 'playNumber', editable: null },
+      { text: 'Offense', value: 'offense', editable: 'text' },
+      { text: 'Defense', value: 'defense', editable: 'text' },
+      { text: 'Down', value: 'down', editable: 'number' },
+      { text: 'Distance', value: 'distance', editable: 'number' },
+      { text: 'Formation', value: 'formation', editable: 'text' },
+      { text: 'Name', value: 'name', editable: 'text' },
+      { text: 'Yards', value: 'yards', editable: 'number' },
+      { text: 'Result', value: 'result', editable: 'text' },
+      { text: 'First Down', value: 'firstDown', editable: 'bool' },
+      { text: 'TD', value: 'touchdown', editable: 'bool' },
+      { text: 'Notes', value: 'notes', editable: 'text' },
     ],
-    items: [],
+    plays: [],
     currentPlay: {
       id: '',
       fileld: '',
@@ -146,7 +194,7 @@ export default {
 
   computed: {
     videoUrl() {
-      if (!this.items.length) return ''
+      if (!this.plays.length) return ''
 
       return `https://d1x95g1lk7jxvh.cloudfront.net/${this.gameId}/${this.currentPlay.fileId}`
     },
@@ -185,14 +233,22 @@ export default {
       api
         .get(this.gameId)
         .then((data) => {
-          this.items = data
-          if (this.items.length) this.currentPlay = this.items[0]
+          this.plays = data
+          if (this.plays.length) this.currentPlay = this.plays[0]
         })
         .catch((error) => {
           this.snackbarText = `Error listing the plays: ${error}`
           this.snackbar = true
         })
     },
+
+    save() {},
+
+    cancel() {},
+
+    open() {},
+
+    close() {},
   },
 }
 </script>
