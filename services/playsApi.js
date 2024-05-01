@@ -31,6 +31,21 @@ class PlaysApi {
 
     return response.data
   }
+
+  async update(playId, data) {
+    const response = await axios.put(
+      `http://localhost:8000/api/Play/${playId}`,
+      data,
+      {
+        headers: {
+          Accept: '*/*',
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+
+    return response.data
+  }
 }
 
 export default PlaysApi

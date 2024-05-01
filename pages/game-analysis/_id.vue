@@ -97,10 +97,10 @@
                             "
                             :return-value.sync="item[header.value]"
                             large
-                            @save="save"
-                            @cancel="cancel"
-                            @open="open"
-                            @close="close"
+                            @save="save()"
+                            @cancel="cancel()"
+                            @open="open(item)"
+                            @close="close()"
                           >
                             {{ item[header.value] }}
                             <template #input>
@@ -122,6 +122,10 @@
                           <v-checkbox
                             v-if="header.editable == 'bool'"
                             v-model="item[header.value ?? false]"
+                            @click="
+                              open(item)
+                              save()
+                            "
                           />
                         </td>
                       </tr>
@@ -242,11 +246,23 @@ export default {
         })
     },
 
-    save() {},
+    save() {
+      // todo: update curent item
+      const api = new PlaysApi()
+      api
+        .update(this.currentPlay.id, this.currentPlay)
+        .then((data) => {})
+        .catch((error) => {
+          this.snackbarText = `Error updating a play: ${error}`
+          this.snackbar = true
+        })
+    },
 
     cancel() {},
 
-    open() {},
+    open(item) {
+      this.currentPlay = item
+    },
 
     close() {},
   },
