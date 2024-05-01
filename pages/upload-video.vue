@@ -24,7 +24,9 @@
             ></v-select>
           </v-col>
         </v-row>
-        <v-btn outlined @click="uploadVideo">Upload Video</v-btn>
+        <v-btn :loading="loading" outlined @click="uploadVideo">
+          Upload Video
+        </v-btn>
       </v-card-text>
     </v-card>
 
@@ -52,6 +54,7 @@ export default {
     selectedFile: null,
     snackbar: false,
     snackbarText: '',
+    loading: false,
   }),
 
   created() {
@@ -64,15 +67,18 @@ export default {
     },
 
     uploadVideo() {
+      this.loading = true
       const api = new PlaysApi()
       api
         .uploadVideo(this.gameId, this.selectedFile)
         .then((data) => {
           alert('Video uploaded!')
+          this.loading = false
         })
         .catch((error) => {
           this.snackbarText = `Error uploading the video: ${error}`
           this.snackbar = true
+          this.loading = false
         })
     },
 
