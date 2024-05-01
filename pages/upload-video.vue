@@ -1,16 +1,17 @@
 <template>
   <div>
     <v-card>
-      <v-card-title>Upload Video</v-card-title>
+      <v-card-title>Upload Videos</v-card-title>
       <v-card-text>
         <v-row>
           <v-col cols="6">
             <v-file-input
-              v-model="selectedFile"
-              label="Choose a video file"
+              v-model="fileList"
+              label="Choose the video files"
               accept=".mp4"
               outlined
-              @change="handleFileUpload"
+              multiple
+              @change="handleMultipleFileUpload"
             />
           </v-col>
           <v-col cols="6">
@@ -24,9 +25,18 @@
             ></v-select>
           </v-col>
         </v-row>
-        <v-btn :loading="loading" outlined @click="uploadVideo">
-          Upload Video
-        </v-btn>
+        <v-row v-show="loading">
+          <v-col>
+            Sending... {{ sendCount.done }} / {{ sendCount.total }}
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-btn :loading="loading" outlined @click="uploadMultipleVideos">
+              Upload Videos
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-card-text>
     </v-card>
 
@@ -52,9 +62,11 @@ export default {
     gameId: 0,
     games: [],
     selectedFile: null,
+    fileList: [],
     snackbar: false,
     snackbarText: '',
     loading: false,
+    sendCount: { total: 0, done: 0 },
   }),
 
   created() {
@@ -62,24 +74,46 @@ export default {
   },
 
   methods: {
-    handleFileUpload(file) {
-      this.selectedFile = file
+    handleMultipleFileUpload(files) {
+      this.fileList = []
+      for (const file of files) {
+        this.fileList.push(file)
+      }
     },
 
-    uploadVideo() {
-      this.loading = true
+    uploadVideo(file) {
       const api = new PlaysApi()
       api
-        .uploadVideo(this.gameId, this.selectedFile)
+        .uploadVideo(this.gameId, file)
         .then((data) => {
           alert('Video uploaded!')
-          this.loading = false
         })
         .catch((error) => {
           this.snackbarText = `Error uploading the video: ${error}`
           this.snackbar = true
-          this.loading = false
         })
+    },
+
+    async uploadMultipleVideos() {
+      this.loading = true
+
+      this.sendCount.total = this.fileList.length
+      this.sendCount.done = 0
+
+      for (const file of this.fileList) {
+        try {
+          const api = new PlaysApi()
+          await api.uploadVideo(this.gameId, file)
+
+          // update UI on success
+          this.sendCount.done++
+        } catch (error) {
+          // handle error
+        }
+      }
+
+      alert('Videos uploaded!')
+      this.loading = false
     },
 
     getGames() {
