@@ -1,11 +1,10 @@
 <template>
   <div>
-    <v-card class="mx-auto" max-width="1400">
-      <v-card-title>{{ game.name }}</v-card-title>
+    <v-card class="mx-auto" max-width="100%">
       <v-card-text>
         <v-container fluid>
           <v-row>
-            <v-col cols="6">
+            <v-col>
               <v-card>
                 <v-card-text>
                   <iframe
@@ -13,66 +12,9 @@
                     height="360"
                     width="540"
                     allow="autoplay"
+                    allowfullscreen
                   />
                 </v-card-text>
-
-                <v-card-actions>
-                  <v-btn outlined @click="previous()">
-                    <v-icon>mdi-skip-previous</v-icon>
-                  </v-btn>
-                  <v-btn outlined @click="next()">
-                    <v-icon>mdi-skip-next</v-icon>
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-col>
-
-            <v-col cols="6">
-              <v-card>
-                <v-row>
-                  <v-col cols="4">
-                    <v-text-field outlined label="Offense"></v-text-field>
-                  </v-col>
-                  <v-col cols="4">
-                    <v-text-field outlined label="Defense"></v-text-field>
-                  </v-col>
-                  <v-col cols="2">
-                    <v-select
-                      :items="['1st', '2nd', '3rd', '4th']"
-                      outlined
-                      label="Down"
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="2">
-                    <v-text-field outlined label="Distance"></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="6">
-                    <v-text-field outlined label="Formation"></v-text-field>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-text-field outlined label="Play"></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="3">
-                    <v-text-field outlined label="Yards"></v-text-field>
-                  </v-col>
-                  <v-col cols="3">
-                    <v-select
-                      :items="possibleResults"
-                      outlined
-                      label="Result"
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="3">
-                    <v-checkbox outlined label="First Down"></v-checkbox>
-                  </v-col>
-                  <v-col cols="3">
-                    <v-checkbox outlined label="TD"></v-checkbox>
-                  </v-col>
-                </v-row>
               </v-card>
             </v-col>
 
@@ -96,11 +38,11 @@
                               header.editable == 'number'
                             "
                             :return-value.sync="item[header.value]"
-                            large
+                            persistent
                             @save="save()"
                             @cancel="cancel()"
                             @open="open(item)"
-                            @close="close()"
+                            @close="save()"
                           >
                             {{ item[header.value] }}
                             <template #input>
@@ -168,14 +110,29 @@ export default {
       { text: 'Defense', value: 'defense', editable: 'text' },
       { text: 'Down', value: 'down', editable: 'number' },
       { text: 'Distance', value: 'distance', editable: 'number' },
-      { text: 'Formation', value: 'formation', editable: 'text' },
-      { text: 'Name', value: 'name', editable: 'text' },
+      { text: 'Goal', value: 'goal', editable: 'text' },
+      { text: 'Situation', value: 'situation', editable: 'text' },
       { text: 'Yards', value: 'yards', editable: 'number' },
+      { text: 'Off Form', value: 'offensiveFormation', editable: 'text' },
+      { text: 'Off Play', value: 'offensivePlay', editable: 'text' },
+      { text: 'Def Form', value: 'defensiveFormation', editable: 'text' },
+      { text: 'Def Play', value: 'defensivePlay', editable: 'text' },
       { text: 'Result', value: 'result', editable: 'text' },
+      { text: 'Penalty', value: 'penalty', editable: 'text' },
       { text: 'First Down', value: 'firstDown', editable: 'bool' },
-      { text: 'TD', value: 'touchdown', editable: 'bool' },
-      { text: 'Notes', value: 'notes', editable: 'text' },
+      { text: 'Touchdown', value: 'touchdown', editable: 'bool' },
+      { text: 'Safety', value: 'safety', editable: 'bool' },
+      { text: 'Runner', value: 'runner', editable: 'text' },
+      { text: 'Passer', value: 'passer', editable: 'text' },
+      { text: 'Target', value: 'target', editable: 'text' },
+      { text: 'Target Position', value: 'targetPosition', editable: 'text' },
+      { text: 'Defensive Target', value: 'defensiveTarget', editable: 'text' },
+      { text: 'Tackler', value: 'tackler', editable: 'text' },
+      { text: 'Interceptor', value: 'interceptor', editable: 'text' },
+      { text: 'Off Notes', value: 'ofensiveNotes', editable: 'text' },
+      { text: 'Def Notes', value: 'defensiveNotes', editable: 'text' },
     ],
+
     plays: [],
     currentPlay: {
       id: '',
@@ -247,7 +204,6 @@ export default {
     },
 
     save() {
-      // todo: update curent item
       const api = new PlaysApi()
       api
         .update(this.currentPlay.id, this.currentPlay)
