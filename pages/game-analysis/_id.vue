@@ -20,7 +20,21 @@
 
             <v-col>
               <v-card>
-                <v-data-table dense :headers="tableHeaders" :items="plays">
+                <v-data-table
+                  dense
+                  multi-sort
+                  :headers="tableHeaders"
+                  :items="plays"
+                  :custom-filter="filterByColumn"
+                  :search="search"
+                >
+                  <template #top>
+                    <v-text-field
+                      v-model="search"
+                      class="pa-2"
+                      label="Search (prop=value)"
+                    ></v-text-field>
+                  </template>
                   <template #body="{ items, headers }">
                     <tbody>
                       <tr v-for="(item, idx) in items" :key="idx">
@@ -151,6 +165,7 @@ export default {
     game: { name: '' },
     snackbar: false,
     snackbarText: '',
+    search: '',
   }),
 
   computed: {
@@ -221,6 +236,20 @@ export default {
     },
 
     close() {},
+
+    filterByColumn(value, query, item) {
+      const parts = query.split('=') // Split the query into parts based on '='
+
+      const column = parts[0]
+      const filter = parts[1]
+
+      return (
+        !query.toString().includes('=') ||
+        (filter != null &&
+          item[column] != null &&
+          item[column].toString().toLocaleLowerCase().includes(filter))
+      )
+    },
   },
 }
 </script>
