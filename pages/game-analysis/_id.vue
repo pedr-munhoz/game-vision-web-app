@@ -3,34 +3,52 @@
     <v-card class="mx-auto" dense>
       <v-container fluid>
         <v-row dense>
-          <v-col cols="7">
+          <v-col cols="8">
             <v-card>
               <v-card-text>
                 <iframe
                   :src="videoUrl"
                   height="360"
-                  width="540"
+                  width="640"
                   allow="autoplay"
                   allowfullscreen
                 />
+                <v-spacer />
+                <v-btn @click="previous()">
+                  <v-icon icon> mdi-skip-previous-outline </v-icon>
+                </v-btn>
+                <v-btn @click="next()">
+                  <v-icon icon> mdi-skip-next-outline </v-icon>
+                </v-btn>
               </v-card-text>
             </v-card>
           </v-col>
 
-          <v-col cols="5">
+          <v-col cols="4">
             <v-card>
               <v-card-title>Filter</v-card-title>
+
               <v-card-text>
-                <v-select
-                  v-model="filter1.prop"
-                  :items="tableHeaders"
-                  label="Column"
-                  item-text="text"
-                  item-value="value"
-                  outlined
-                  @change="filter1.value = ''"
-                />
-                <v-text-field v-model="filter1.value" label="Value" outlined />
+                <v-row>
+                  <v-col>
+                    <v-select
+                      v-model="filter.prop"
+                      :items="tableHeaders"
+                      label="Column"
+                      item-text="text"
+                      item-value="value"
+                      outlined
+                      @change="filter.value = ''"
+                    />
+                  </v-col>
+                  <v-col>
+                    <v-text-field
+                      v-model="filter.value"
+                      label="Value"
+                      outlined
+                    />
+                  </v-col>
+                </v-row>
               </v-card-text>
             </v-card>
           </v-col>
@@ -41,9 +59,10 @@
                 dense
                 multi-sort
                 :headers="tableHeaders"
-                :items="plays"
+                :items="filteredPlays"
                 :custom-filter="filterByColumn"
-                :search="filter1.value"
+                :search="filter.value"
+                :items-per-page="5"
               >
                 <template #body="{ items, headers }">
                   <tbody>
@@ -52,9 +71,12 @@
                         <v-icon
                           v-if="header.value == 'show'"
                           icon
+                          :color="item.id == currentPlay.id ? 'primary' : ''"
                           @click="show(item)"
                         >
-                          mdi-play-outline
+                          mdi-play{{
+                            item.id == currentPlay.id ? '' : '-outline'
+                          }}
                         </v-icon>
                         <v-edit-dialog
                           v-if="
@@ -85,7 +107,7 @@
                             />
                           </template>
                         </v-edit-dialog>
-                        <v-checkbox
+                        <v-simple-checkbox
                           v-if="header.editable == 'bool'"
                           v-model="item[header.value ?? false]"
                           @click="
@@ -175,7 +197,7 @@ export default {
     snackbar: false,
     snackbarText: '',
     search: '',
-    filter1: { prop: '', value: '' },
+    filter: { prop: 'offense', value: '' },
   }),
 
   computed: {
@@ -183,6 +205,18 @@ export default {
       if (!this.plays.length) return ''
 
       return `https://d1x95g1lk7jxvh.cloudfront.net/${this.gameId}/${this.currentPlay.fileId}`
+    },
+
+    filteredPlays() {
+      return this.plays.filter(
+        (x) =>
+          !this.filter.value ||
+          (x[this.filter.prop] != null &&
+            x[this.filter.prop]
+              .toString()
+              .toLocaleLowerCase()
+              .includes(this.filter.value))
+      )
     },
   },
 
@@ -197,9 +231,27 @@ export default {
       this.currentPlay = item
     },
 
-    next() {},
+    next() {
+      const currentIndex = this.filteredPlays.findIndex(
+        (play) => play.id === this.currentPlay.id
+      )
+      const nextIndex = currentIndex + 1
+      if (nextIndex < this.filteredPlays.length) {
+        // Next object exists
+        this.currentPlay = this.filteredPlays[nextIndex]
+      }
+    },
 
-    previous() {},
+    previous() {
+      const currentIndex = this.filteredPlays.findIndex(
+        (play) => play.id === this.currentPlay.id
+      )
+      const previousIndex = currentIndex - 1
+      if (previousIndex >= 0) {
+        // Next object exists
+        this.currentPlay = this.filteredPlays[previousIndex]
+      }
+    },
 
     getGame() {
       const api = new GamesApi()
@@ -248,19 +300,13 @@ export default {
     close() {},
 
     filterByColumn(value, query, item) {
-      // const parts = query.split('=') // Split the query into parts based on '='
-
-      // const column = parts[0]
-      // const filter = parts[1]
-
-      const column = this.filter1.prop
-      const filter = this.filter1.value
-
       return (
-        // !query.toString().includes('=') ||
-        filter != null &&
-        item[column] != null &&
-        item[column].toString().toLocaleLowerCase().includes(filter)
+        this.filter.value != null &&
+        item[this.filter.prop] != null &&
+        item[this.filter.prop]
+          .toString()
+          .toLocaleLowerCase()
+          .includes(this.filter.value)
       )
     },
   },

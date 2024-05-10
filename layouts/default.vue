@@ -28,7 +28,8 @@
         <Nuxt />
       </v-container>
     </v-main>
-    <v-footer :absolute="!fixed" app>
+    <v-footer absolute>
+      <v-spacer />
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
@@ -40,8 +41,7 @@ export default {
   data() {
     return {
       clipped: true,
-      drawer: false,
-      fixed: false,
+      drawer: true,
       items: [
         {
           icon: 'mdi-apps',
