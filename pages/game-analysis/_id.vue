@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="mx-auto" max-width="100%" dense>
+    <v-card class="mx-auto" dense>
       <v-container fluid>
         <v-row>
           <v-col cols="7">

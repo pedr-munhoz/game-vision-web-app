@@ -1,12 +1,6 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
+    <v-navigation-drawer v-model="drawer" :clipped="clipped" fixed app>
       <v-list>
         <v-list-item
           v-for="(item, i) in items"
@@ -65,7 +59,6 @@ export default {
           to: '/game-list',
         },
       ],
-      miniVariant: false,
       right: true,
       rightDrawer: false,
       title: 'Game Vision 2024',
