@@ -2,7 +2,7 @@
   <div>
     <v-card class="mx-auto" dense>
       <v-container fluid>
-        <v-row>
+        <v-row dense>
           <v-col cols="7">
             <v-card>
               <v-card-text>
