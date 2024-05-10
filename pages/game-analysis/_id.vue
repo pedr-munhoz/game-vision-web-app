@@ -1,101 +1,110 @@
 <template>
   <div>
-    <v-card class="mx-auto" max-width="100%">
-      <v-card-text>
-        <v-container fluid>
-          <v-row>
-            <v-col>
-              <v-card>
-                <v-card-text>
-                  <iframe
-                    :src="videoUrl"
-                    height="360"
-                    width="540"
-                    allow="autoplay"
-                    allowfullscreen
-                  />
-                </v-card-text>
-              </v-card>
-            </v-col>
+    <v-card class="mx-auto" max-width="100%" dense>
+      <v-container fluid>
+        <v-row>
+          <v-col cols="7">
+            <v-card>
+              <v-card-text>
+                <iframe
+                  :src="videoUrl"
+                  height="360"
+                  width="540"
+                  allow="autoplay"
+                  allowfullscreen
+                />
+              </v-card-text>
+            </v-card>
+          </v-col>
 
-            <v-col>
-              <v-card>
-                <v-data-table
-                  dense
-                  multi-sort
-                  :headers="tableHeaders"
-                  :items="plays"
-                  :custom-filter="filterByColumn"
-                  :search="search"
-                >
-                  <template #top>
-                    <v-text-field
-                      v-model="search"
-                      class="pa-2"
-                      label="Search (prop=value)"
-                    ></v-text-field>
-                  </template>
-                  <template #body="{ items, headers }">
-                    <tbody>
-                      <tr v-for="(item, idx) in items" :key="idx">
-                        <td v-for="(header, key) in headers" :key="key">
-                          <v-icon
-                            v-if="header.value == 'show'"
-                            icon
-                            @click="show(item)"
-                          >
-                            mdi-play-outline
-                          </v-icon>
-                          <v-edit-dialog
-                            v-if="
-                              header.editable == 'text' ||
-                              header.editable == 'number'
-                            "
-                            :return-value.sync="item[header.value]"
-                            persistent
-                            @save="save()"
-                            @cancel="cancel()"
-                            @open="open(item)"
-                            @close="save()"
-                          >
-                            {{ item[header.value] }}
-                            <template #input>
-                              <v-text-field
-                                v-if="header.editable == 'text'"
-                                v-model="item[header.value]"
-                                label="Edit"
-                                single-line
-                              />
-                              <v-text-field
-                                v-if="header.editable == 'number'"
-                                v-model="item[header.value]"
-                                label="Edit"
-                                single-line
-                                type="number"
-                              />
-                            </template>
-                          </v-edit-dialog>
-                          <v-checkbox
-                            v-if="header.editable == 'bool'"
-                            v-model="item[header.value ?? false]"
-                            @click="
-                              open(item)
-                              save()
-                            "
-                          />
-                        </td>
-                      </tr>
-                    </tbody>
-                  </template>
-                  <template #item.show="{ item }">
-                    <v-icon icon @click="show(item)"> mdi-play-outline </v-icon>
-                  </template>
-                </v-data-table>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
+          <v-col cols="5">
+            <v-card>
+              <v-card-title>Filter</v-card-title>
+              <v-card-text>
+                <v-select
+                  v-model="filter1.prop"
+                  :items="tableHeaders"
+                  label="Column"
+                  item-text="text"
+                  item-value="value"
+                  outlined
+                  @change="filter1.value = ''"
+                />
+                <v-text-field v-model="filter1.value" label="Value" outlined />
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col>
+            <v-card>
+              <v-data-table
+                dense
+                multi-sort
+                :headers="tableHeaders"
+                :items="plays"
+                :custom-filter="filterByColumn"
+                :search="filter1.value"
+              >
+                <template #body="{ items, headers }">
+                  <tbody>
+                    <tr v-for="(item, idx) in items" :key="idx">
+                      <td v-for="(header, key) in headers" :key="key">
+                        <v-icon
+                          v-if="header.value == 'show'"
+                          icon
+                          @click="show(item)"
+                        >
+                          mdi-play-outline
+                        </v-icon>
+                        <v-edit-dialog
+                          v-if="
+                            header.editable == 'text' ||
+                            header.editable == 'number'
+                          "
+                          :return-value.sync="item[header.value]"
+                          persistent
+                          @save="save()"
+                          @cancel="cancel()"
+                          @open="open(item)"
+                          @close="save()"
+                        >
+                          {{ item[header.value] }}
+                          <template #input>
+                            <v-text-field
+                              v-if="header.editable == 'text'"
+                              v-model="item[header.value]"
+                              label="Edit"
+                              single-line
+                            />
+                            <v-text-field
+                              v-if="header.editable == 'number'"
+                              v-model="item[header.value]"
+                              label="Edit"
+                              single-line
+                              type="number"
+                            />
+                          </template>
+                        </v-edit-dialog>
+                        <v-checkbox
+                          v-if="header.editable == 'bool'"
+                          v-model="item[header.value ?? false]"
+                          @click="
+                            open(item)
+                            save()
+                          "
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+                <template #item.show="{ item }">
+                  <v-icon icon @click="show(item)"> mdi-play-outline </v-icon>
+                </template>
+              </v-data-table>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-card>
 
     <v-snackbar v-model="snackbar">
@@ -166,6 +175,7 @@ export default {
     snackbar: false,
     snackbarText: '',
     search: '',
+    filter1: { prop: '', value: '' },
   }),
 
   computed: {
@@ -238,16 +248,19 @@ export default {
     close() {},
 
     filterByColumn(value, query, item) {
-      const parts = query.split('=') // Split the query into parts based on '='
+      // const parts = query.split('=') // Split the query into parts based on '='
 
-      const column = parts[0]
-      const filter = parts[1]
+      // const column = parts[0]
+      // const filter = parts[1]
+
+      const column = this.filter1.prop
+      const filter = this.filter1.value
 
       return (
-        !query.toString().includes('=') ||
-        (filter != null &&
-          item[column] != null &&
-          item[column].toString().toLocaleLowerCase().includes(filter))
+        // !query.toString().includes('=') ||
+        filter != null &&
+        item[column] != null &&
+        item[column].toString().toLocaleLowerCase().includes(filter)
       )
     },
   },
