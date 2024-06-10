@@ -57,7 +57,7 @@ export default {
     getGames() {
       const api = new GamesApi()
       api
-        .getAll()
+        .getAll(this.$store.getters.secret)
         .then((data) => {
           this.games = data
         })
@@ -70,7 +70,7 @@ export default {
     createGame(name) {
       const api = new GamesApi()
       api
-        .createGame(name)
+        .createGame(name, this.$store.getters.secret)
         .then((data) => {
           this.getGames()
           alert('Game created!')
