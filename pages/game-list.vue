@@ -2,23 +2,14 @@
   <div>
     <v-card>
       <v-card-title>
-        <v-row>
-          <v-col cols="10">Games</v-col>
-          <v-col>
-            <game-creator @update="createGame($event)" />
-          </v-col>
-        </v-row>
+        Games
+        <v-spacer />
+        <game-creator @update="createGame($event)" />
       </v-card-title>
 
       <v-card-text>
         <v-list>
-          <v-list-item
-            v-for="item in games"
-            :key="item.id"
-            :to="`/game-analysis/${item.id}`"
-            router
-            exact
-          >
+          <v-list-item v-for="item in games" :key="item.id" :to="`/game-analysis/${item.id}`" router exact>
             <v-list-item-action>
               <v-icon>mdi-video-outline</v-icon>
             </v-list-item-action>
@@ -93,5 +84,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

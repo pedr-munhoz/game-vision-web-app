@@ -18,13 +18,11 @@
             <em><small>&mdash; Pedro Munhoz</small></em>
           </div>
           <hr class="my-3" />
-          <a href="https://github.com/pedr-munhoz/game-vision-web-api" target="_blank" rel="noopener noreferrer">
-            Server GitHub
-          </a>
-          <br />
-          <a href="https://github.com/pedr-munhoz/game-vision-web-app" target="_blank" rel="noopener noreferrer">
-            Web App GitHub
-          </a>
+
+          <v-text-field v-model="teamSecret" class="mt-10" label="Please inform your team secret" outlined />
+          <v-btn outlined @click="saveTeamSecret()">
+            <v-icon>mdi-check-bold</v-icon>
+          </v-btn>
         </v-card-text>
       </v-card>
     </v-col>
@@ -34,5 +32,15 @@
 <script>
 export default {
   name: 'IndexPage',
+
+  data: () => ({
+    teamSecret: ''
+  }),
+
+  methods: {
+    saveTeamSecret() {
+      this.$store.dispatch('updateSecret', this.teamSecret)
+    },
+  }
 }
 </script>
