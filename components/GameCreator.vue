@@ -15,7 +15,12 @@
       </v-card-title>
       <v-divider />
       <v-card-text class="mt-10">
-        <v-text-field v-model="value" label="Name" outlined />
+        <v-text-field
+          v-model="value"
+          label="Name"
+          outlined
+          @keyup.enter="confirm()"
+        />
       </v-card-text>
       <v-card-actions>
         <v-spacer />

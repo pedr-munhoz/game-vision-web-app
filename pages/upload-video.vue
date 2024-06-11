@@ -119,7 +119,7 @@ export default {
     getGames() {
       const api = new GamesApi()
       api
-        .getAll()
+        .getAll(this.$store.getters.secret)
         .then((data) => {
           this.games = data
         })
@@ -132,5 +132,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

@@ -11,15 +11,22 @@
         </v-card-title>
         <v-card-text>
           <p>
-            Game Vision is a video analysis plataform for football and flag football.
-            It was designed to empower teams and athletes to take the game to the next level.
+            Game Vision is a video analysis plataform for football and flag
+            football. It was designed to empower teams and athletes to take the
+            game to the next level.
           </p>
           <div class="text-xs-right">
             <em><small>&mdash; Pedro Munhoz</small></em>
           </div>
           <hr class="my-3" />
 
-          <v-text-field v-model="teamSecret" class="mt-10" label="Please inform your team secret" outlined />
+          <v-text-field
+            v-model="teamSecret"
+            class="mt-10"
+            label="Please inform your team secret"
+            outlined
+            @keyup.enter="saveTeamSecret()"
+          />
           <v-btn outlined @click="saveTeamSecret()">
             <v-icon>mdi-check-bold</v-icon>
           </v-btn>
@@ -34,13 +41,14 @@ export default {
   name: 'IndexPage',
 
   data: () => ({
-    teamSecret: ''
+    teamSecret: '',
   }),
 
   methods: {
     saveTeamSecret() {
       this.$store.dispatch('updateSecret', this.teamSecret)
+      alert('Secret updted!')
     },
-  }
+  },
 }
 </script>
