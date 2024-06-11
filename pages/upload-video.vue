@@ -69,7 +69,7 @@ export default {
     sendCount: { total: 0, done: 0 },
   }),
 
-  created() {
+  mounted() {
     this.getGames()
   },
 
@@ -119,7 +119,7 @@ export default {
     getGames() {
       const api = new GamesApi()
       api
-        .getAll(this.$store.getters.secret)
+        .getAll()
         .then((data) => {
           this.games = data
         })

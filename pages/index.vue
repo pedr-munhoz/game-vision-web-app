@@ -22,13 +22,13 @@
             <hr class="my-3" />
 
             <v-text-field
-              v-model="teamSecret"
+              v-model="key"
               class="mt-10"
-              label="Please inform your team secret"
+              label="Please inform your team key"
               outlined
-              @keyup.enter="saveTeamSecret()"
+              @keyup.enter="savekey()"
             />
-            <v-btn outlined @click="saveTeamSecret()">
+            <v-btn outlined @click="savekey()">
               <v-icon>mdi-check-bold</v-icon>
             </v-btn>
           </v-card-text>
@@ -53,22 +53,23 @@ import TeamsApi from '@/services/teamsApi'
 export default {
   name: 'IndexPage',
 
+  middleware: ['auth'],
+
   data: () => ({
-    teamSecret: '',
+    key: '',
     team: {},
     snackbar: false,
     snackbarText: '',
   }),
 
   methods: {
-    saveTeamSecret() {
-      if (!this.teamSecret) {
+    savekey() {
+      if (!this.key) {
         this.snackbarText = 'You must inform a secret!'
         this.snackbar = true
         return
       }
 
-      this.$store.dispatch('updateSecret', this.teamSecret)
       this.getTeam()
     },
 
@@ -76,10 +77,10 @@ export default {
       const api = new TeamsApi()
 
       api
-        .get(this.teamSecret)
+        .get(this.key)
         .then((data) => {
-          this.team = data
-          alert(`Welcome ${this.team.name}!`)
+          this.$store.dispatch('updateTeam', data)
+          alert(`Welcome ${data.name}!`)
         })
         .catch((error) => {
           this.snackbarText = `Error fetching the team data: ${error}`

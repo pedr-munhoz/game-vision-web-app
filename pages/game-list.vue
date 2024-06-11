@@ -9,7 +9,13 @@
 
       <v-card-text>
         <v-list>
-          <v-list-item v-for="item in games" :key="item.id" :to="`/game-analysis/${item.id}`" router exact>
+          <v-list-item
+            v-for="item in games"
+            :key="item.id"
+            :to="`/game-analysis/${item.id}`"
+            router
+            exact
+          >
             <v-list-item-action>
               <v-icon>mdi-video-outline</v-icon>
             </v-list-item-action>
@@ -49,7 +55,7 @@ export default {
     snackbarText: '',
   }),
 
-  created() {
+  mounted() {
     this.getGames()
   },
 
@@ -57,7 +63,7 @@ export default {
     getGames() {
       const api = new GamesApi()
       api
-        .getAll(this.$store.getters.secret)
+        .getAll()
         .then((data) => {
           this.games = data
         })
@@ -70,7 +76,7 @@ export default {
     createGame(name) {
       const api = new GamesApi()
       api
-        .createGame(name, this.$store.getters.secret)
+        .createGame(name)
         .then((data) => {
           this.getGames()
           alert('Game created!')

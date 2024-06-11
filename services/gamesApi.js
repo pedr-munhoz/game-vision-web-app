@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 class GamesApi {
-  async getAll(teamPrefix) {
+  async getAll() {
+    const teamPrefix = window.$nuxt?.$store?.getters?.team?.prefix
     const response = await axios.get(
       `${process.env.API_URL}/api/team/${teamPrefix}/game`,
       {
@@ -24,7 +25,8 @@ class GamesApi {
     return response.data
   }
 
-  async createGame(name, teamPrefix) {
+  async createGame(name) {
+    const teamPrefix = window.$nuxt?.$store?.getters?.team?.prefix
     const data = { name }
     const response = await axios.post(
       `${process.env.API_URL}/api/team/${teamPrefix}/game`,

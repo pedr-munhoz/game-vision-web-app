@@ -1,22 +1,22 @@
 // store/index.js
 export const state = () => ({
-  secret: '',
+  team: {},
 })
 
 export const mutations = {
-  setSecret(state, secret) {
-    state.secret = secret
+  setTeam(state, team) {
+    state.team = team
   },
 }
 
 export const actions = {
-  updateSecret({ commit }, secret) {
-    commit('setSecret', secret)
+  updateTeam({ commit }, team) {
+    commit('setTeam', team)
   },
 }
 
 export const getters = {
-  secret: (state) => {
-    return state.secret
+  team: (state) => {
+    return state.team
   },
 }
