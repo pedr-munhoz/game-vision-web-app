@@ -3,7 +3,7 @@ import axios from 'axios'
 class PlaysApi {
   async get(gameId) {
     const response = await axios.get(
-      `${process.env.API_URL}/api/play/game/${gameId}`,
+      `${process.env.API_URL}/api/game/${gameId}/play`,
       {
         headers: {
           Accept: '*/*',
@@ -19,7 +19,7 @@ class PlaysApi {
     formData.append('video', videoFile, videoFile.name)
 
     const response = await axios.post(
-      `${process.env.API_URL}/api/play/game/${gameId}`,
+      `${process.env.API_URL}/api/game/${gameId}/play`,
       formData,
       {
         headers: {
