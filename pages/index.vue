@@ -20,17 +20,19 @@
               <em><small>&mdash; Pedro Munhoz</small></em>
             </div>
             <hr class="my-3" />
-
-            <v-text-field
-              v-model="key"
-              class="mt-10"
-              label="Please inform your team key"
-              outlined
-              @keyup.enter="savekey()"
-            />
-            <v-btn outlined @click="savekey()">
-              <v-icon>mdi-check-bold</v-icon>
-            </v-btn>
+          </v-card-text>
+        </v-card>
+        <v-card>
+          <v-card-text>
+            <v-form v-model="valid" @submit.prevent="login()">
+              <v-container>
+                <v-text-field v-model="email" label="Email" outlined />
+                <v-text-field v-model="password" label="Password" outlined />
+                <v-btn outlined type="submit">
+                  <v-icon>mdi-check-bold</v-icon>
+                </v-btn>
+              </v-container>
+            </v-form>
           </v-card-text>
         </v-card>
       </v-col>
@@ -48,7 +50,7 @@
 </template>
 
 <script>
-import TeamsApi from '@/services/teamsApi'
+import IdentityApi from '@/services/identityApi'
 
 export default {
   name: 'IndexPage',
@@ -60,30 +62,21 @@ export default {
     team: {},
     snackbar: false,
     snackbarText: '',
+    email: '',
+    password: '',
   }),
 
   methods: {
-    savekey() {
-      if (!this.key) {
-        this.snackbarText = 'You must inform a secret!'
-        this.snackbar = true
-        return
-      }
-
-      this.getTeam()
-    },
-
-    getTeam() {
-      const api = new TeamsApi()
-
+    login() {
+      const api = new IdentityApi()
       api
-        .get(this.key)
+        .login(this.email, this.password)
         .then((data) => {
-          this.$store.dispatch('updateTeam', data)
-          alert(`Welcome ${data.name}!`)
+          this.$store.dispatch('logIn')
+          alert(`Welcome!`)
         })
         .catch((error) => {
-          this.snackbarText = `Error fetching the team data: ${error}`
+          this.snackbarText = `${error}`
           this.snackbar = true
         })
     },
