@@ -1,7 +1,7 @@
 export default function ({ store, redirect, route }) {
   if (route.path === '/') return
 
-  if (!store.getters.team.prefix) {
+  if (!store.getters.isLoggedIn) {
     return redirect('/')
   }
 }

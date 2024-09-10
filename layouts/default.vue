@@ -67,7 +67,8 @@ export default {
 
   computed: {
     ...mapGetters({
-      team: 'team', // maps this.team to this.$store.getters.team
+      team: 'team',
+      isLoggedIn: 'isLoggedIn',
     }),
 
     title() {
@@ -77,7 +78,7 @@ export default {
     },
 
     navigablePages() {
-      if (!this.team.prefix)
+      if (!this.isLoggedIn)
         return [
           {
             icon: 'mdi-apps',
