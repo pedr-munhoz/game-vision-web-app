@@ -8,6 +8,7 @@ class PlaysApi {
         headers: {
           Accept: '*/*',
         },
+        withCredentials: true,
       }
     )
 
@@ -26,6 +27,7 @@ class PlaysApi {
           Accept: '*/*',
           'Content-Type': 'multipart/form-data',
         },
+        withCredentials: true,
       }
     )
 
@@ -41,6 +43,7 @@ class PlaysApi {
           Accept: '*/*',
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       }
     )
 

@@ -2,15 +2,12 @@ import axios from 'axios'
 
 class GamesApi {
   async getAll() {
-    const teamPrefix = window.$nuxt?.$store?.getters?.team?.prefix
-    const response = await axios.get(
-      `${process.env.API_URL}/api/team/${teamPrefix}/game`,
-      {
-        headers: {
-          Accept: '*/*',
-        },
-      }
-    )
+    const response = await axios.get(`${process.env.API_URL}/api/team/game`, {
+      headers: {
+        Accept: '*/*',
+      },
+      withCredentials: true,
+    })
 
     return response.data
   }
@@ -20,22 +17,23 @@ class GamesApi {
       headers: {
         Accept: '*/*',
       },
+      withCredentials: true,
     })
 
     return response.data
   }
 
   async createGame(name) {
-    const teamPrefix = window.$nuxt?.$store?.getters?.team?.prefix
     const data = { name }
     const response = await axios.post(
-      `${process.env.API_URL}/api/team/${teamPrefix}/game`,
+      `${process.env.API_URL}/api/team/game`,
       data,
       {
         headers: {
           Accept: '*/*',
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       }
     )
 

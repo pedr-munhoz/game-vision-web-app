@@ -27,7 +27,12 @@
             <v-form v-model="valid" @submit.prevent="login()">
               <v-container>
                 <v-text-field v-model="email" label="Email" outlined />
-                <v-text-field v-model="password" label="Password" outlined />
+                <v-text-field
+                  v-model="password"
+                  label="Password"
+                  type="password"
+                  outlined
+                />
                 <v-btn outlined type="submit">
                   <v-icon>mdi-check-bold</v-icon>
                 </v-btn>
@@ -51,6 +56,7 @@
 
 <script>
 import IdentityApi from '@/services/identityApi'
+import TeamsApi from '@/services/teamsApi'
 
 export default {
   name: 'IndexPage',
@@ -69,15 +75,29 @@ export default {
   methods: {
     login() {
       const api = new IdentityApi()
+
       api
         .login(this.email, this.password)
         .then((data) => {
-          this.$store.dispatch('logIn')
+          this.getTeam()
           alert(`Welcome!`)
         })
         .catch((error) => {
           this.snackbarText = `${error}`
           this.snackbar = true
+        })
+    },
+
+    getTeam() {
+      const api = new TeamsApi()
+
+      api
+        .get()
+        .then((data) => {
+          this.$store.dispatch('updateTeam', data)
+        })
+        .catch((error) => {
+          alert(error)
         })
     },
   },

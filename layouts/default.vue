@@ -62,13 +62,11 @@ export default {
     ],
     right: true,
     rightDrawer: false,
-    // title: 'Game Vision 2024',
   }),
 
   computed: {
     ...mapGetters({
       team: 'team',
-      isLoggedIn: 'isLoggedIn',
     }),
 
     title() {
@@ -78,15 +76,6 @@ export default {
     },
 
     navigablePages() {
-      if (!this.isLoggedIn)
-        return [
-          {
-            icon: 'mdi-apps',
-            title: 'Welcome',
-            to: '/',
-          },
-        ]
-
       return this.items
     },
   },
